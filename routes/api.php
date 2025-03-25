@@ -2,7 +2,7 @@
 
 use App\Controllers\Api\UserController;
 
-// Rota protegida por chave de API
+// This is an example of how to use the API key middleware
 $router->group('ApiKeyMiddleware', function ($router) {
   $router->get('/api/users', [UserController::class, 'index']);
 });

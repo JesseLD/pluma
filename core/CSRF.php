@@ -4,32 +4,41 @@ namespace Core;
 
 class CSRF
 {
-  public static function generateToken()
-  {
-    session_start();
+    /**
+     * Generates and stores a CSRF token in session (if not already present).
+     */
+    public static function generate(): string
+    {
+        Session::start();
 
-    if (empty($_SESSION['_csrf_token'])) {
-      $_SESSION['_csrf_token'] = bin2hex(random_bytes(32));
+        if (!isset($_SESSION['_csrf_token'])) {
+            $_SESSION['_csrf_token'] = bin2hex(random_bytes(32));
+        }
+
+        return $_SESSION['_csrf_token'];
     }
 
-    return $_SESSION['_csrf_token'];
-  }
+    /**
+     * Returns a hidden input field to include in forms.
+     */
+    public static function tokenField(): string
+    {
+        $token = self::generate();
+        return '<input type="hidden" name="_csrf" value="' . htmlspecialchars($token) . '">';
+    }
 
-  public static function getToken()
-  {
-    session_start();
-    return $_SESSION['_csrf_token'] ?? null;
-  }
+    /**
+     * Validates the CSRF token from POST request.
+     */
+    public static function validate(): void
+    {
+        Session::start();
 
-  public static function verifyToken($token)
-  {
-    session_start();
-    return isset($_SESSION['_csrf_token']) && hash_equals($_SESSION['_csrf_token'], $token);
-  }
+        $expected = $_SESSION['_csrf_token'] ?? null;
+        $received = $_POST['_csrf'] ?? null;
 
-  public static function tokenField()
-  {
-    $token = self::generateToken();
-    return '<input type="hidden" name="_csrf" value="' . $token . '">';
-  }
+        if (!$expected || !$received || !hash_equals($expected, $received)) {
+            Response::exception(Exceptions::CSRF_TOKEN_MISMATCH);
+        }
+    }
 }

@@ -1,6 +1,6 @@
 <?php
 extend('default');
-set_title('Welcome');
+set_title('Login');
 
 section('content');
 ?>

@@ -7,36 +7,36 @@ class Exceptions
   public const NOT_FOUND = [
     'code' => 404,
     'name' => 'NotFoundException',
-    'message' => 'Recurso não encontrado'
+    'message' => 'Resource not found'
   ];
 
   public const UNAUTHORIZED = [
     'code' => 401,
     'name' => 'UnauthorizedException',
-    'message' => 'Você precisa estar autenticado'
+    'message' => 'Unauthorized'
   ];
 
   public const VALIDATION = [
     'code' => 422,
     'name' => 'ValidationException',
-    'message' => 'Dados inválidos'
+    'message' => 'Validation error'
   ];
 
   public const SERVER_ERROR = [
     'code' => 500,
     'name' => 'ServerErrorException',
-    'message' => 'Erro interno no servidor'
+    'message' => 'Server error'
   ];
 
   public const INTERNAL_SERVER_ERROR = [
     'code' => 500,
     'name' => 'InternalServerErrorException',
-    'message' => 'Erro interno no servidor'
+    'message' => 'Internal server error'
   ];
 
   public const CSRF_TOKEN_MISMATCH = [
     'code' => 403,
     'name' => 'CsrfException',
-    'message' => 'CSRF token inválido ou ausente'
+    'message' => 'Invalid CSRF token'
   ];
 }

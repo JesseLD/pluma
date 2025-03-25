@@ -10,7 +10,11 @@ class View
     protected static array $shared = [];
 
     /**
-     * Define uma variável compartilhada acessível nas views/layouts
+     * Stores a shared key-value pair that can be accessed from any view or layout.
+     *
+     * Example:
+     * View::set('title', 'Dashboard');
+     * In layout: View::get('title');
      */
     public static function set(string $key, $value): void
     {
@@ -18,7 +22,10 @@ class View
     }
 
     /**
-     * Recupera uma variável compartilhada
+     * Retrieves a shared variable.
+     *
+     * @param string $key The key to retrieve.
+     * @param mixed $default Default value if key is not found.
      */
     public static function get(string $key, $default = null)
     {
@@ -26,7 +33,10 @@ class View
     }
 
     /**
-     * Define qual layout será usado
+     * Sets the layout file to be used for the current view.
+     *
+     * Example:
+     * View::extend('app'); // looks for layouts/app.pluma.php
      */
     public static function extend(string $layout): void
     {
@@ -34,7 +44,10 @@ class View
     }
 
     /**
-     * Inicia uma seção de conteúdo
+     * Starts capturing a section of content to be injected into the layout.
+     *
+     * Example in view:
+     * View::startSection('content');
      */
     public static function startSection(string $name): void
     {
@@ -43,7 +56,10 @@ class View
     }
 
     /**
-     * Finaliza a seção atual e armazena seu conteúdo
+     * Ends the last started section and stores the captured content.
+     *
+     * Example in view:
+     * View::endSection();
      */
     public static function endSection(): void
     {
@@ -53,7 +69,10 @@ class View
     }
 
     /**
-     * Exibe o conteúdo de uma seção no layout
+     * Outputs the content of a section from the layout.
+     *
+     * Example in layout:
+     * View::section('content');
      */
     public static function section(string $name): void
     {
@@ -61,28 +80,60 @@ class View
     }
 
     /**
-     * Renderiza a view e o layout (se definido)
+     * Renders a view with optional data and wraps it in a layout if defined.
+     * Supports .pluma.php templates and auto-escapes {{ }} output using e().
+     *
+     * @param string $view Dot-separated path to the view (e.g. "auth.login")
+     * @param array $data Variables to extract into the view
+     * @return string The rendered HTML
      */
     public static function render(string $view, array $data = []): string
     {
         $basePath = dirname(__DIR__) . "/public/views/";
-        $viewPath = $basePath . str_replace('.', '/', $view) . ".php";
+        $dotPath = str_replace('.', '/', $view);
+        $viewPath = $basePath . $dotPath . '.pluma.php';
 
         if (!file_exists($viewPath)) {
-            throw new \Exception("View '$view' não encontrada.");
+            throw new \Exception("View '{$view}' not found at: {$viewPath}");
         }
+
+        // Read the view content
+        $rawContent = file_get_contents($viewPath);
+
+        // Replace {{ ... }} with escaped output
+        $parsedContent = preg_replace_callback('/{{\s*(.+?)\s*}}/', function ($matches) {
+            return '<?= e(' . $matches[1] . ') ?>';
+        }, $rawContent);
+
+        // Generate temporary cached file path
+        $cacheDir = dirname(__DIR__) . '/storage/views/';
+        if (!is_dir($cacheDir)) {
+            mkdir($cacheDir, 0777, true);
+        }
+
+        $cacheFile = $cacheDir . md5($viewPath) . '.cache.php';
+
+        // file_put_contents($cacheFile, $parsedContent);
+
+        // Only recompile if original view is newer than the cache
+        if (!file_exists($cacheFile) || filemtime($viewPath) > filemtime($cacheFile)) {
+            file_put_contents($cacheFile, $parsedContent);
+        }
+
 
         extract($data);
 
-        // Executa a view para preencher as seções
-        include $viewPath;
+        // Load the parsed view into $content
+        ob_start();
+        include $cacheFile;
+        $content = ob_get_clean();
 
-        // Se tiver layout, renderiza o layout com as seções
+        // Render layout if needed
         if (self::$layout) {
-            $layoutPath = $basePath . "layouts/" . self::$layout . ".php";
+            $layoutPath = $basePath . "layouts/" . self::$layout . ".pluma.php";
 
             if (!file_exists($layoutPath)) {
-                throw new \Exception("Layout '" . self::$layout . "' não encontrado.");
+                throw new \Exception("Layout '" . self::$layout . "' not found at: {$layoutPath}");
             }
 
             ob_start();
@@ -90,7 +141,6 @@ class View
             return ob_get_clean();
         }
 
-        // Se não houver layout, retorna a seção "content", se existir
-        return self::$sections['content'] ?? '';
+        return $content;
     }
 }
