@@ -11,7 +11,7 @@ function is_debug(): bool {
 }
 
 function dd(...$vars) {
-    if (!is_debug()) return;
+    // if (!is_debug()) return;
 
     echo '<pre>';
     foreach ($vars as $var) {
@@ -78,6 +78,21 @@ function include_partial(string $name, array $data = [])
   include $path;
 }
 
+if (!function_exists('render_component')) {
+    function render_component(string $name, array $props = []): void
+    {
+        $path = __DIR__ . '/../../public/views/partials/components/' . $name . '.php';
+
+        if (!file_exists($path)) {
+            throw new Exception("Component '$name' not found $path");
+        }
+
+        extract($props);
+        include $path;
+    }
+}
+
+
 
 if (!function_exists('redirect')) {
   function redirect(string $url, int $code = 302)
@@ -86,4 +101,8 @@ if (!function_exists('redirect')) {
     header("Location: $url");
     exit;
   }
+}
+
+function base_path(string $path = ''): string {
+    return dirname(__DIR__, 1) . ($path ? DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR) : '');
 }

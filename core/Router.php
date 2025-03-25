@@ -12,6 +12,12 @@ class Router
     $this->addRoute('GET', $uri, $action);
   }
 
+  public function getRoutes()
+  {
+    return $this->routes;
+  }
+
+
   public function post($uri, $action)
   {
     $this->addRoute('POST', $uri, $action);
@@ -25,15 +31,23 @@ class Router
     $this->currentMiddleware = $previous;
   }
 
-  protected function addRoute($method, $uri, $action)
+  protected function addRoute($method, $uri, $action, $name = null)
   {
     $this->routes[] = [
       'method' => $method,
       'uri' => trim($uri, '/'),
       'action' => $action,
       'middleware' => $this->currentMiddleware,
+      'name' => $name
     ];
   }
+
+  public function name($name)
+  {
+    $lastIndex = count($this->routes) - 1;
+    $this->routes[$lastIndex]['name'] = $name;
+  }
+
 
   public function dispatch()
   {
@@ -54,13 +68,15 @@ class Router
 
         // Verifica se é closure
         if (is_callable($route['action'])) {
-          return call_user_func($route['action']);
+          echo call_user_func($route['action']);
+          return;
         }
 
-        // Caso seja controller + método
+        // Controller + método
         [$controller, $method] = $route['action'];
         $controllerInstance = new $controller();
-        return $controllerInstance->$method();
+        echo $controllerInstance->$method();
+        return;
       }
     }
 

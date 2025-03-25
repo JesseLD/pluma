@@ -1,5 +1,6 @@
 <?php
 
+require_once __DIR__ . '/../core/helpers.php';
 require_once __DIR__ . '/../boot/app.php';
 
 use Core\Router;

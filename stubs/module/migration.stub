@@ -1,0 +1,23 @@
+<?php
+
+use App\Core\Database;
+
+class {{class}}
+{
+    public function up()
+    {
+        $pdo = Database::connection();
+        $pdo->exec(\"\"\"
+            CREATE TABLE IF NOT EXISTS {{table}} (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        \"\"\");
+    }
+
+    public function down()
+    {
+        $pdo = Database::connection();
+        $pdo->exec(\"DROP TABLE IF EXISTS {{table}}\");
+    }
+}

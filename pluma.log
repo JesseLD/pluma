@@ -1,0 +1,48 @@
+[Tue Mar 25 14:06:47 2025] PHP 8.4.3 Development Server (http://localhost:8000) started
+[Tue Mar 25 14:06:57 2025] [::1]:63411 Accepted
+[Tue Mar 25 14:06:57 2025] [::1]:63411 [302]: GET /
+[Tue Mar 25 14:06:57 2025] [::1]:63411 Closing
+[Tue Mar 25 14:06:57 2025] [::1]:63412 Accepted
+[Tue Mar 25 14:06:57 2025] [::1]:63412 [200]: GET /welcome
+[Tue Mar 25 14:06:57 2025] [::1]:63412 Closing
+Directory /Users/macbook-dev/Documents/jesse/public does not exist.
+[Tue Mar 25 14:12:25 2025] PHP 8.4.3 Development Server (http://localhost:8000) started
+[Tue Mar 25 14:12:29 2025] [::1]:63489 Accepted
+[Tue Mar 25 14:12:29 2025] [::1]:63489 [200]: GET /welcome
+[Tue Mar 25 14:12:29 2025] [::1]:63489 Closing
+[Tue Mar 25 14:17:53 2025] [::1]:63508 Accepted
+[Tue Mar 25 14:17:53 2025] [::1]:63508 [200]: GET /welcome
+[Tue Mar 25 14:17:53 2025] [::1]:63508 Closing
+[Tue Mar 25 14:19:09 2025] [::1]:63553 Accepted
+[Tue Mar 25 14:19:09 2025] [::1]:63553 [200]: GET /welcome
+[Tue Mar 25 14:19:09 2025] [::1]:63553 Closing
+[Tue Mar 25 14:19:47 2025] [::1]:63555 Accepted
+[Tue Mar 25 14:19:47 2025] [::1]:63555 [200]: GET /
+[Tue Mar 25 14:19:47 2025] [::1]:63555 Closing
+[Tue Mar 25 14:19:55 2025] [::1]:63556 Accepted
+[Tue Mar 25 14:19:55 2025] [::1]:63556 [200]: GET /welcome
+[Tue Mar 25 14:19:55 2025] [::1]:63556 Closing
+[Tue Mar 25 14:20:06 2025] [::1]:63557 Accepted
+[Tue Mar 25 14:20:06 2025] [::1]:63557 [200]: GET /welcome
+[Tue Mar 25 14:20:06 2025] [::1]:63557 Closing
+[Tue Mar 25 14:20:10 2025] [::1]:63558 Accepted
+[Tue Mar 25 14:20:10 2025] [::1]:63558 [200]: GET /welcome
+[Tue Mar 25 14:20:10 2025] [::1]:63558 Closing
+[Tue Mar 25 14:22:18 2025] [::1]:63564 Accepted
+[Tue Mar 25 14:22:18 2025] [::1]:63564 [200]: GET /welcome
+[Tue Mar 25 14:22:18 2025] [::1]:63564 Closing
+[Tue Mar 25 14:22:19 2025] [::1]:63565 Accepted
+[Tue Mar 25 14:22:19 2025] [::1]:63565 [200]: GET /welcome
+[Tue Mar 25 14:22:19 2025] [::1]:63565 Closing
+[Tue Mar 25 14:22:21 2025] [::1]:63566 Accepted
+[Tue Mar 25 14:22:21 2025] [::1]:63566 [200]: GET /welcome
+[Tue Mar 25 14:22:21 2025] [::1]:63566 Closing
+[Tue Mar 25 14:25:18 2025] [::1]:63723 Accepted
+[Tue Mar 25 14:25:18 2025] [::1]:63723 [200]: GET /welcome
+[Tue Mar 25 14:25:18 2025] [::1]:63723 Closing
+[Tue Mar 25 14:26:23 2025] [::1]:63796 Accepted
+[Tue Mar 25 14:26:23 2025] [::1]:63796 [200]: GET /welcome
+[Tue Mar 25 14:26:23 2025] [::1]:63796 Closing
+[Tue Mar 25 14:26:23 2025] [::1]:63801 Accepted
+[Tue Mar 25 14:26:23 2025] [::1]:63801 [200]: GET /welcome
+[Tue Mar 25 14:26:23 2025] [::1]:63801 Closing

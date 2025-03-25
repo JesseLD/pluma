@@ -6,7 +6,8 @@ use App\Controllers\Auth\LoginController;
 
 // Public routes
 $router->get('/', function () {
-  redirect('/welcome');
+  // redirect('/welcome');
+  echo 'Welcome to the home page';
 });
 $router->get('/welcome', [HomeController::class, 'index']);
 
