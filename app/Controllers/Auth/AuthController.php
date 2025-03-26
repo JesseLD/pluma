@@ -8,8 +8,7 @@ class AuthController extends Controller
 {
   public function login()
   {
-    $data = Request::all(); 
+    $data = Request::all();
     LoginRequest::validate($data);
-
   }
 }

@@ -2,6 +2,13 @@
 
 namespace App\Console\Commands;
 
+/**
+ * Generates a new Controller file from the stub.
+ *
+ * Usage:
+ * php pluma make:controller UserController
+ */
+
 class MakeControllerCommand
 {
     public function handle(array $args)
