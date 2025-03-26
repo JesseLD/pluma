@@ -12,7 +12,8 @@ use App\Console\Commands\{
     ServeCommand,
     StopCommand,
     RestartCommand,
-    RouteListCommand
+    RouteListCommand,
+    MakeResourceCommand
 };
 
 /**
@@ -45,6 +46,7 @@ class CommandRunner
             'stop'            => StopCommand::class,
             'restart'         => RestartCommand::class,
             'route:list'      => RouteListCommand::class,
+            'make:resource'   => MakeResourceCommand::class,
         ];
 
         // Command not found

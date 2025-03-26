@@ -12,7 +12,7 @@ use Core\Response;
  * Must be registered in the router using:
  * $router->group('ApiKeyMiddleware', function (...) { ... });
  */
-class ApiKeyMiddleware
+class ApiKeyMiddleware extends Middleware
 {
 
   protected static string $header = "Authorization";
@@ -27,7 +27,7 @@ class ApiKeyMiddleware
      *
      * @return void
      */
-    public function handle(): void
+    public function handle($args = null): void
     {
         // Try to get the API key from  header
         $providedKey = $_SERVER[Self::$header] ?? null;

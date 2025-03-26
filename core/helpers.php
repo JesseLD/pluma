@@ -213,3 +213,55 @@ function flash(string $key, ?string $value = null): void
 function base_path(string $path = ''): string {
     return dirname(__DIR__, 1) . ($path ? DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR) : '');
 }
+
+
+/**
+ * ========== Config Helpers ==========
+ */
+
+
+/**
+ * Retrieves a configuration value from config/config.php using dot notation.
+ *
+ * Example: config('db.host') will return the database host.
+ *
+ * @param string $key     Dot-notated config key (e.g., 'db.host')
+ * @param mixed  $default Value returned if key is not found
+ * @return mixed
+ */
+function config(string $key, $default = null)
+{
+    static $config;
+
+    if (!$config) {
+        $config = require __DIR__ . '/../config/config.php';
+    }
+
+    $keys = explode('.', $key);
+    $value = $config;
+
+    foreach ($keys as $k) {
+        if (isset($value[$k])) {
+            $value = $value[$k];
+        } else {
+            return $default;
+        }
+    }
+
+    return $value;
+}
+
+
+
+/**
+ * ========== Logger Helpers ==========
+ */
+
+
+/**
+ * Logs a message to the application log file.
+ */
+function app_log(string $message, string $level = 'info'): void
+{
+    Core\Logger::$level($message);
+}

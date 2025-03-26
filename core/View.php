@@ -102,8 +102,16 @@ class View
 
         // Replace {{ ... }} with escaped output
         $parsedContent = preg_replace_callback('/{{\s*(.+?)\s*}}/', function ($matches) {
-            return '<?= e(' . $matches[1] . ') ?>';
+            $expr = trim($matches[1]);
+
+            // Se não começa com '$', adiciona
+            if (!str_starts_with($expr, '$') && preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $expr)) {
+                $expr = '$' . $expr;
+            }
+
+            return "<?php echo e($expr); ?>";
         }, $rawContent);
+
 
         // Generate temporary cached file path
         $cacheDir = dirname(__DIR__) . '/storage/views/';
@@ -142,5 +150,21 @@ class View
         }
 
         return $content;
+    }
+
+
+    /**
+     * Checks if a view file exists.
+     *
+     * @param string $view Dot-notated view name (e.g. "errors.404")
+     * @return bool
+     */
+    public static function exists(string $view): bool
+    {
+        $basePath = dirname(__DIR__) . "/public/views/";
+        $dotPath = str_replace('.', '/', $view);
+        $viewPath = $basePath . $dotPath . '.pluma.php';
+
+        return file_exists($viewPath);
     }
 }

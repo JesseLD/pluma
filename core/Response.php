@@ -10,9 +10,6 @@ class Response
    * @param string $message Response message (e.g., "Created successfully")
    * @param array $data Optional data payload
    * @param int $status HTTP status code (default: 200)
-   *
-   * Example:
-   * Response::json('User created', ['user' => $user], 201);
    */
   public static function json(string $message, array $data = [], int $status = 200): void
   {
@@ -30,12 +27,9 @@ class Response
   /**
    * Sends a structured JSON exception with message, data, and status code.
    *
-   * @param string $message Response message (e.g., "Created successfully")
-   * @param string $exception Optional data payload
+   * @param string $message Error message
+   * @param string $exception Exception name or type
    * @param int $status HTTP status code (default: 200)
-   *
-   * Example:
-   * Response::jsonException('User created', 'UserAlreadyExists', 409);
    */
   protected static function jsonException(string $message, string $exception, int $status = 200): void
   {
@@ -50,12 +44,8 @@ class Response
     exit;
   }
 
-
   /**
    * Sends plain text response.
-   *
-   * @param string $content The content to be sent.
-   * @param int $status The HTTP status code. Default is 200.
    */
   public static function text(string $content, int $status = 200): void
   {
@@ -66,10 +56,7 @@ class Response
   }
 
   /**
-   * Redirects the user to a different URL.
-   *
-   * @param string $url The target URL.
-   * @param int $status The HTTP status code. Default is 302 (temporary redirect).
+   * Redirects to another URL.
    */
   public static function redirect(string $url, int $status = 302): void
   {
@@ -79,10 +66,7 @@ class Response
   }
 
   /**
-   * Sends a file download response.
-   *
-   * @param string $filePath Full path to the file to be downloaded.
-   * @param string|null $fileName Optional custom name for the downloaded file.
+   * Sends a file for download.
    */
   public static function download(string $filePath, ?string $fileName = null): void
   {
@@ -107,15 +91,10 @@ class Response
   }
 
   /**
-   * Throws an HTTP exception with a status code and message.
-   * Accepts either an exception array (from Exceptions class) or custom values.
+   * Throws an HTTP exception, returning either JSON or HTML depending on the request.
    *
-   * @param array|int $exception Exception array (e.g. Exceptions::NOT_FOUND), or just a status code.
-   * @param string|null $message Optional custom message if passing status code directly.
-   *
-   * Examples:
-   * Response::exception(Exceptions::NOT_FOUND);
-   * Response::exception(403, "Access denied.");
+   * @param array|int $exception Exception array or status code
+   * @param string|null $message Optional custom message
    */
   public static function exception(array|int $exception, ?string $message = null): void
   {
@@ -130,8 +109,33 @@ class Response
     }
 
     http_response_code($code);
-    header('Content-Type: application/json');
-    Self::jsonException($msg, $name, $code);
-    exit;
+
+    if (self::isApiRequest()) {
+      self::jsonException($msg, $name, $code);
+    } else {
+      $viewPath = "errors.{$code}";
+      if (View::exists($viewPath)) {
+        echo View::render($viewPath, ['message' => $msg]);
+      } else {
+        echo View::render('errors.default', ['message' => $msg, 'code' => $code]);
+      }
+      exit;
+    }
+  }
+
+  /**
+   * Determines if the current request expects a JSON response.
+   *
+   * @return bool
+   */
+  protected static function isApiRequest(): bool
+  {
+    $uri = $_SERVER['REQUEST_URI'] ?? '';
+    $accept = $_SERVER['HTTP_ACCEPT'] ?? '';
+    $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+
+    return str_starts_with($uri, '/api') ||
+      str_contains($accept, 'application/json') ||
+      str_contains($contentType, 'application/json');
   }
 }

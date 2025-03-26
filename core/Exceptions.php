@@ -39,4 +39,36 @@ class Exceptions
     'name' => 'CsrfException',
     'message' => 'Invalid CSRF token'
   ];
+
+  public const METHOD_NOT_ALLOWED = [
+    'code' => 405,
+    'name' => 'MethodNotAllowedException',
+    'message' => 'Method not allowed'
+  ];
+
+  public const BAD_REQUEST = [
+    'code' => 400,
+    'name' => 'BadRequestException',
+    'message' => 'Bad request'
+  ];
+
+  public const RATE_LIMIT_EXCEEDED = [
+    'code' => 429,
+    'name' => 'RateLimitException',
+    'message' => 'Rate limit exceeded'
+  ];
+
+  public const FORBIDDEN = [
+    'code' => 403,
+    'name' => 'ForbiddenException',
+    'message' => 'Forbidden'
+  ];
+
+  public const TOO_MANY_REQUESTS = [
+    'code' => 429,
+    'name' => 'TooManyRequestsException',
+    'message' => 'Too many requests'
+  ];
+
+
 }

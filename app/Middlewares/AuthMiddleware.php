@@ -14,13 +14,13 @@ use Core\Response;
  *     $router->get('/dashboard', [DashboardController::class, 'index']);
  * });
  */
-class AuthMiddleware
+class AuthMiddleware extends Middleware
 {
     /**
      * Checks if the user is authenticated.
      * If not, redirects to the login route.
      */
-    public function handle(): void
+    public function handle($args = null): void
     {
         if (!Auth::check()) {
             Response::redirect('/login');

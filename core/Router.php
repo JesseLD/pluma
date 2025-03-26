@@ -4,7 +4,7 @@ namespace Core;
 
 /**
  * Handles registration and dispatching of application routes.
- * Supports GET/POST methods, controller actions, closures, parameters, and middleware.
+ * Supports GET, POST, PUT, PATCH, DELETE methods, controller actions, closures, parameters, and middleware.
  */
 class Router
 {
@@ -45,6 +45,40 @@ class Router
     }
 
     /**
+     * Registers a PUT route.
+     *
+     * @param string $uri
+     * @param callable|array $action
+     */
+    public function put($uri, $action)
+    {
+        $this->addRoute('PUT', $uri, $action);
+    }
+
+    /**
+     * Registers a PATCH route.
+     *
+     * @param string $uri
+     * @param callable|array $action
+     */
+    public function patch($uri, $action)
+    {
+        $this->addRoute('PATCH', $uri, $action);
+    }
+
+    /**
+     * Registers a DELETE route.
+     *
+     * @param string $uri
+     * @param callable|array $action
+     */
+    public function delete($uri, $action)
+    {
+        $this->addRoute('DELETE', $uri, $action);
+    }
+
+
+    /**
      * Groups multiple routes under a middleware.
      *
      * @param string $middleware The middleware name (e.g. 'AuthMiddleware:admin')
@@ -61,6 +95,39 @@ class Router
         $this->currentMiddleware = $middleware;
         $callback($this);
         $this->currentMiddleware = $previous;
+    }
+
+    /**
+     * Enables Laravel-style static middleware grouping:
+     * Router::middleware('Middleware')->group(fn($router) => ...);
+     *
+     * @param string $middleware The middleware name (e.g. 'VerifyCsrfToken')
+     * @return object Anonymous class with group() method
+     */
+    public static function middleware(string $middleware)
+    {
+        $router = new self();
+
+        return new class($router, $middleware) {
+            protected $router;
+            protected $middleware;
+
+            public function __construct($router, $middleware)
+            {
+                $this->router = $router;
+                $this->middleware = $middleware;
+            }
+
+            /**
+             * Groups routes under the middleware previously defined.
+             *
+             * @param callable $callback Closure that receives the router instance
+             */
+            public function group(callable $callback)
+            {
+                $this->router->group($this->middleware, $callback);
+            }
+        };
     }
 
     /**
@@ -128,7 +195,12 @@ class Router
 
                     if (class_exists($middlewareClass)) {
                         $middleware = new $middlewareClass();
-                        $middleware->handle($middlewareArgs);
+
+                        if ($middleware instanceof \App\Middlewares\Middleware) {
+                            $middleware->handle($middlewareArgs);
+                        } else {
+                            throw new \Exception("Middleware must extend base Middleware class.");
+                        }
                     }
                 }
 

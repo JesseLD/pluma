@@ -16,7 +16,7 @@
 require_once 'init_env.php';
 
 // Load CSRF token generator and validator
-require_once 'init_csrf.php';
+// require_once 'init_csrf.php';
 
 use Dotenv\Dotenv;
 

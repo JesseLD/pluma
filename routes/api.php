@@ -1,8 +1,10 @@
 <?php
 
 use App\Controllers\Api\UserController;
+use Core\Router;
 
-// This is an example of how to use the API key middleware
+
+// API ROUTES (no csrf, no authentication required, api key required)
 $router->group('ApiKeyMiddleware', function ($router) {
   $router->get('/api/users', [UserController::class, 'index']);
 });

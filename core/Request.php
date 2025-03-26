@@ -72,4 +72,32 @@ class Request
         $data = self::all();
         return $data[$key] ?? $default;
     }
+
+
+    /**
+     * Returns the HTTP request method (GET, POST, PUT, DELETE, etc.)
+     *
+     * @return string
+     *
+     * Example:
+     * Request::method() → 'POST'
+     */
+    public static function method(): string
+    {
+        return strtoupper($_SERVER['REQUEST_METHOD'] ?? 'GET');
+    }
+
+    /**
+     * Returns the client's IP address.
+     *
+     * @return string
+     *
+     * Example:
+     * Request::ip() → '192.168.0.1'
+     */
+    public static function ip(): string
+    {
+        return $_SERVER['REMOTE_ADDR']
+            ?? ($_SERVER['HTTP_X_FORWARDED_FOR'] ?? '0.0.0.0');
+    }
 }
