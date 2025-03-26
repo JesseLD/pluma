@@ -82,7 +82,7 @@ class View
     /**
      * Renders a view with optional data and wraps it in a layout if defined.
      * Supports .pluma.php templates and auto-escapes {{ }} output using e().
-     *
+     * 
      * @param string $view Dot-separated path to the view (e.g. "auth.login")
      * @param array $data Variables to extract into the view
      * @return string The rendered HTML
@@ -100,17 +100,33 @@ class View
         // Read the view content
         $rawContent = file_get_contents($viewPath);
 
-        // Replace {{ ... }} with escaped output
+        // Replace {{ ... }} with escaped PHP output using helper `e()`.
+        // Automatically adds "$" to variable names that appear at the beginning
+        // of the expression, like: `message ?? 'Default'` → `$message ?? 'Default'`
+
+        /**
+         * RAW output: {!! ... !!} → <?php echo ... ?>;
+         */
+        $parsedContent = preg_replace_callback('/{!!\s*(.+?)\s*!!}/', function ($matches) {
+            return "<?php echo {$matches[1]}; ?>";
+        }, $rawContent);
+
+        /**
+         * ESCAPED output: {{ ... }} → <?php echo e(...); ?>
+         */
         $parsedContent = preg_replace_callback('/{{\s*(.+?)\s*}}/', function ($matches) {
             $expr = trim($matches[1]);
 
-            // Se não começa com '$', adiciona
-            if (!str_starts_with($expr, '$') && preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $expr)) {
-                $expr = '$' . $expr;
+            // Match expressions que começam com uma variável simples (sem $)
+            if (preg_match('/^([a-zA-Z_][a-zA-Z0-9_]*)(.*)$/', $expr, $parts)) {
+                if (!str_starts_with($parts[1], '$')) {
+                    $expr = '$' . $parts[1] . $parts[2];
+                }
             }
 
             return "<?php echo e($expr); ?>";
         }, $rawContent);
+
 
 
         // Generate temporary cached file path

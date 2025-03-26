@@ -114,14 +114,20 @@ class Response
       self::jsonException($msg, $name, $code);
     } else {
       $viewPath = "errors.{$code}";
+
+      // Render the HTML error view with message and code
+      $data = ['message' => $msg, 'code' => $code];
+
       if (View::exists($viewPath)) {
-        echo View::render($viewPath, ['message' => $msg]);
+        echo View::render($viewPath, $data);
       } else {
-        echo View::render('errors.default', ['message' => $msg, 'code' => $code]);
+        echo View::render('errors.default', $data);
       }
+
       exit;
     }
   }
+
 
   /**
    * Determines if the current request expects a JSON response.
