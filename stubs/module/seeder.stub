@@ -1,0 +1,12 @@
+<?php
+
+use App\Core\Database;
+
+class {{class}}
+{
+    public function run()
+    {
+        $pdo = Database::connection();
+        // Inserir dados aqui
+    }
+}

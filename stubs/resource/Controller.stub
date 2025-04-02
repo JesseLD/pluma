@@ -1,0 +1,45 @@
+<?php
+
+namespace App\Controllers;
+
+use Core\Controller;
+use App\Models\{{name}};
+use App\Requests\{{name}}Request;
+
+class {{name}}Controller extends Controller
+{
+    public function index()
+    {
+        // List all {{namePlural}}
+    }
+
+    public function create()
+    {
+        // Show form to create a new {{name}}
+    }
+
+    public function store()
+    {
+        // Handle POST to create {{name}}
+    }
+
+    public function show($id)
+    {
+        // Show a single {{name}}
+    }
+
+    public function edit($id)
+    {
+        // Show form to edit {{name}}
+    }
+
+    public function update($id)
+    {
+        // Handle PUT to update {{name}}
+    }
+
+    public function destroy($id)
+    {
+        // Handle DELETE to delete {{name}}
+    }
+}

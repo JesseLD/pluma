@@ -1,0 +1,15 @@
+<?php
+
+namespace App\Requests;
+
+use App\Core\FormRequest;
+
+class {{class}} extends FormRequest
+{
+    public function rules(): array
+    {
+        return [
+            // 'campo' => 'required'
+        ];
+    }
+}
