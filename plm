@@ -1,0 +1,25 @@
+#!/usr/bin/env php
+<?php
+
+// ==========================================
+// File: bin/pluma
+// Description: Entry point for Pluma CLI commands
+// ==========================================
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+use Pluma\Console\Kernel;
+use Pluma\Console\Commands\MakeModelCommand;
+
+$kernel = new Kernel();
+$kernel->register(new MakeModelCommand());
+
+$input = $argv[1] ?? null;
+
+if (!$input) {
+    echo "\nPluma CLI\n";
+    echo "Usage: php pluma <command>\n\n";
+    exit(0);
+}
+
+$kernel->handle($input);

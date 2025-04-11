@@ -1,0 +1,10 @@
+<?php
+
+namespace App\Models;
+
+use Pluma\Database\Model;
+
+class {{ class }} extends Model
+{
+    protected static string $table = '{{ table }}';
+}

@@ -3,8 +3,12 @@
   "autoload": {
     "psr-4": {
       "App\\": "app/",
-      "Core\\": "core/"
-    }
+      "Core\\": "core/",
+      "Pluma\\": "pluma/"
+    },
+    "files": [
+      "pluma/helpers.php"
+    ]
   },
   "authors": [
     {
